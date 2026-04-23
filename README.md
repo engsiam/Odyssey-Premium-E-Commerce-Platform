@@ -142,15 +142,10 @@ http://localhost:3000
 
 ## 🌐 Live Demo
 
-👉 *Add your Vercel link here*
+👉 [*Live Link*](https://odyssey-premium-e-commerce-platform.vercel.app/)
 
 ---
 
-## 📁 Repository
-
-👉 *Add your GitHub repo link here*
-
----
 
 ## 🧠 Developer Notes
 
