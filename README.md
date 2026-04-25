@@ -66,7 +66,7 @@
 ### 1. Clone Repository
 
 ```bash
-git clone <repo-url>
+git clone <https://github.com/engsiam/Odyssey-Premium-E-Commerce-Platform.git>
 cd odyssey
 ```
 

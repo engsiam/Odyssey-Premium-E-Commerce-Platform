@@ -13,9 +13,7 @@ export function useProducts() {
     setLoading(true);
     try {
       const data = await fetchProducts();
-      console.log('Fetched products from Firebase:', data);
       setProducts(data);
-      console.log('Set products in store:', data.length);
     } catch (error) {
       console.error('Failed to refresh products:', error);
     } finally {

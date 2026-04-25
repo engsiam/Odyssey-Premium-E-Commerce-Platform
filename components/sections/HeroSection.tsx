@@ -3,9 +3,9 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/Button";
-import { useProducts } from "@/hooks/useProducts";
-import { formatPrice } from "@/lib/utils";
+import { fetchProducts } from "@/lib/productService";
 import Image from "next/image";
+import { useEffect, useState } from "react";
 
 const containerVariants = {
   hidden: {},
@@ -27,8 +27,78 @@ const wordVariants = {
 };
 
 export function HeroSection() {
-  const { products } = useProducts();
-  const featured = products[0];
+  const [products, setProducts] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchProducts().then((data) => {
+      setProducts(data);
+      setLoading(false);
+    });
+  }, []);
+
+  if (loading) {
+    return (
+      <section className="relative min-h-screen flex items-center overflow-hidden">
+        <div className="absolute inset-0 bg-brand-cream" />
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-0">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            <div className="space-y-6 max-w-xl">
+              <div className="h-16 w-48 bg-gray-200 rounded animate-pulse" />
+              <div className="h-16 w-48 bg-gray-200 rounded animate-pulse" />
+              <div className="h-16 w-48 bg-brand-amber/20 rounded animate-pulse" />
+              <div className="h-4 w-64 bg-gray-200 rounded animate-pulse" />
+              <div className="h-12 w-32 bg-brand-navy/10 rounded animate-pulse" />
+            </div>
+            <div className="flex justify-center">
+              <div className="relative max-w-md mx-auto lg:ml-auto">
+                <div className="absolute -top-4 -left-4 w-72 h-72 bg-brand-amber/10 rounded-full blur-3xl" />
+                <div className="relative bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100">
+                  <div className="aspect-[4/3] bg-gray-200 animate-pulse" />
+                  <div className="p-6">
+                    <div className="h-3 w-16 bg-gray-200 rounded animate-pulse mb-2" />
+                    <div className="h-5 w-40 bg-gray-200 rounded animate-pulse mb-1" />
+                    <div className="h-4 w-20 bg-gray-200 rounded animate-pulse" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  if (!products[0]) {
+    return (
+      <section className="relative min-h-screen flex items-center overflow-hidden">
+        <div className="absolute inset-0 bg-brand-cream" />
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-0">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            <div className="space-y-6 max-w-xl">
+              <h1 className="font-display text-5xl sm:text-6xl lg:text-7xl font-bold text-brand-navy leading-[1.05]">
+                Discover.
+              </h1>
+              <h1 className="font-display text-5xl sm:text-6xl lg:text-7xl font-bold text-brand-navy leading-[1.05]">
+                Desire.
+              </h1>
+              <h1 className="font-display text-5xl sm:text-6xl lg:text-7xl font-bold text-brand-amber leading-[1.05]">
+                Own.
+              </h1>
+              <p className="text-lg text-brand-slate max-w-md leading-relaxed">
+                Curated lifestyle products for those who seek excellence.
+              </p>
+              <Link href="/items">
+                <Button variant="primary" size="lg">
+                  Shop Now
+                </Button>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="relative min-h-screen flex items-center overflow-hidden">
@@ -109,7 +179,7 @@ export function HeroSection() {
             initial={{ opacity: 0, x: 30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, delay: 0.3 }}
-            className="block mt-10 lg:mt-0"
+            className="block mt-10 lg:mt-0 relative z-10"
           >
             <motion.div
               animate={{ y: [0, -12, 0] }}
@@ -118,36 +188,36 @@ export function HeroSection() {
                 repeat: Infinity,
                 ease: "easeInOut",
               }}
-              className="relative max-w-md mx-auto lg:ml-auto"
+              className="relative max-w-md mx-auto lg:ml-auto z-20"
             >
               {/* Glow */}
-              <div className="absolute -top-4 -left-4 w-72 h-72 bg-brand-amber/20 rounded-full blur-3xl" />
+              <div className="absolute -top-4 -left-4 w-72 h-72 bg-brand-amber/20 rounded-full blur-3xl -z-10" />
 
               {/* Card */}
-              <div className="relative bg-white rounded-2xl shadow-[0_20px_60px_rgba(10,14,26,0.15)] overflow-hidden border border-gray-100">
-                <div className="aspect-[4/3] overflow-hidden">
+              <div className="relative bg-white rounded-2xl shadow-[0_20px_60px_rgba(10,14,26,0.15)] overflow-hidden border border-gray-100 z-10">
+                <div className="aspect-[4/3] overflow-hidden relative">
                   <Image
-                    src={featured?.imageUrl}
-                    alt={featured?.title}
+                    src={products[0]?.imageUrl}
+                    alt={products[0]?.title}
                     fill
                     priority
                     placeholder="blur"
                     blurDataURL="/placeholder.png"
-                    className="object-cover object-[center_20%]"
+                    className="object-cover object-[center_10%]"
                   />
                 </div>
 
-                <div className="p-6">
-                  <p className="text-xs text-brand-amber font-medium uppercase tracking-wide mb-1">
+                <div className="p-6 bg-white relative z-10">
+                  <p className="text-xs text-amber-600 font-medium uppercase tracking-wide mb-1">
                     Featured
                   </p>
 
-                  <h3 className="font-display text-lg font-bold text-brand-navy mb-1">
-                    {featured?.title}
+                  <h3 className="text-lg font-semibold text-gray-900 mb-1 min-h-[1.5rem] font-display">
+                    {products[0]?.title || 'No Title'}
                   </h3>
 
-                  <p className="text-brand-navy font-semibold">
-                    {formatPrice(featured?.price || 189)}
+                  <p className="text-lg font-bold text-gray-900">
+                    ${products[0]?.price || 0}
                   </p>
                 </div>
               </div>

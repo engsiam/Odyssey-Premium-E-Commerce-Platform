@@ -1,6 +1,8 @@
 import { 
   collection, 
-  getDocs, 
+  getDocs,
+  query,
+  orderBy,
   doc, 
   addDoc, 
   deleteDoc,
@@ -15,13 +17,36 @@ const COLLECTION_NAME = 'products';
 
 export async function fetchProducts(): Promise<Product[]> {
   try {
-    console.log('Fetching from collection:', COLLECTION_NAME);
-    const snapshot = await getDocs(collection(db, COLLECTION_NAME));
-    console.log('Firebase docs count:', snapshot.size);
-    console.log('Firebase docs:', snapshot.docs.map(d => ({ id: d.id, title: d.data().title })));
+    const q = query(
+      collection(db, COLLECTION_NAME),
+      orderBy('createdAt', 'desc')
+    );
     
-    return snapshot.docs.map((doc) => {
-      const data = doc.data();
+    let snapshot;
+    try {
+      snapshot = await getDocs(q);
+    } catch {
+      snapshot = await getDocs(collection(db, COLLECTION_NAME));
+    }
+    
+    const products: Product[] = [];
+    
+    snapshot.docs.forEach((docSnap) => {
+      const data = docSnap.data();
+      
+      const title = data.title;
+      let price = data.price;
+      
+      if (!title || typeof title !== 'string' || title.trim() === '') {
+        return;
+      }
+      
+      const parsedPrice = Number(price);
+      if (isNaN(parsedPrice)) {
+        return;
+      }
+      price = parsedPrice;
+      
       let createdAt: string;
       if (data.createdAt instanceof Timestamp) {
         createdAt = data.createdAt.toDate().toISOString();
@@ -30,12 +55,23 @@ export async function fetchProducts(): Promise<Product[]> {
       } else {
         createdAt = new Date().toISOString();
       }
-      return {
-        id: doc.id,
-        ...data,
+      
+      products.push({
+        id: docSnap.id,
+        title: title.trim(),
+        shortDescription: data.shortDescription || '',
+        fullDescription: data.fullDescription || '',
+        price: Number(price),
+        category: data.category || '',
+        rating: data.rating || 0,
+        imageUrl: data.imageUrl || '',
+        tags: Array.isArray(data.tags) ? data.tags : [],
         createdAt,
-      } as Product;
+        addedBy: data.addedBy || '',
+      });
     });
+    
+    return products;
   } catch (error) {
     console.error('Error fetching products:', error);
     throw error;

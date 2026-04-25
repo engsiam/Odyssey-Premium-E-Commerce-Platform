@@ -73,12 +73,13 @@ export default function ItemsPage() {
 
   const filteredProducts = useMemo(() => {
     return products.filter((p) => {
+      const searchLower = filters.search.toLowerCase();
       const matchSearch =
-        p.title.toLowerCase().includes(filters.search.toLowerCase()) ||
-        p.shortDescription.toLowerCase().includes(filters.search.toLowerCase());
+        String(p.title).toLowerCase().includes(searchLower) ||
+        String(p.shortDescription).toLowerCase().includes(searchLower);
       const matchCategory = !filters.category || p.category === filters.category;
-      const matchPrice = p.price >= filters.minPrice && p.price <= filters.maxPrice;
-      const matchRating = p.rating >= filters.minRating;
+      const matchPrice = Number(p.price) >= filters.minPrice && Number(p.price) <= filters.maxPrice;
+      const matchRating = Number(p.rating) >= filters.minRating;
       return matchSearch && matchCategory && matchPrice && matchRating;
     });
   }, [products, filters]);

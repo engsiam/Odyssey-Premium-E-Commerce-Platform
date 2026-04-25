@@ -1,13 +1,14 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, User, Plus, LayoutGrid, LogOut } from 'lucide-react';
-import { useAuthStore } from '@/stores/authStore';
-import { Button } from '@/components/ui/Button';
-import { cn } from '@/lib/utils';
+import { useState, useEffect } from "react";
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
+import { motion, AnimatePresence } from "framer-motion";
+import { Menu, X, Plus, LayoutGrid, LogOut } from "lucide-react";
+import { useAuthStore } from "@/stores/authStore";
+import { Button } from "@/components/ui/Button";
+import { cn } from "@/lib/utils";
+import Image from "next/image";
 
 const dropdownVariants = {
   hidden: { opacity: 0, scale: 0.95, y: -8 },
@@ -32,27 +33,32 @@ export function Navbar() {
 
   useEffect(() => {
     const handler = () => setScrolled(window.scrollY > 20);
-    window.addEventListener('scroll', handler);
-    return () => window.removeEventListener('scroll', handler);
+    window.addEventListener("scroll", handler);
+    return () => window.removeEventListener("scroll", handler);
   }, []);
 
   const handleLogout = async () => {
     const { setUser } = useAuthStore.getState();
     setUser(null);
     setDropdownOpen(false);
-    router.push('/');
+    router.push("/");
   };
 
   const getInitials = (name: string | null) => {
-    if (!name) return 'U';
-    return name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+    if (!name) return "U";
+    return name
+      .split(" ")
+      .map((n) => n[0])
+      .join("")
+      .toUpperCase()
+      .slice(0, 2);
   };
 
   return (
     <header
       className={cn(
-        'sticky top-0 z-50 transition-all duration-300',
-        scrolled ? 'bg-white/80 backdrop-blur-md shadow-sm' : 'bg-transparent'
+        "sticky top-0 z-50 transition-all duration-300",
+        scrolled ? "bg-white/80 backdrop-blur-md shadow-sm" : "bg-transparent",
       )}
     >
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -68,15 +74,19 @@ export function Navbar() {
               />
               <circle cx="16" cy="16" r="3" fill="#F5A623" />
             </svg>
-            <span className="font-display text-xl font-bold text-brand-navy">Odyssey</span>
+            <span className="font-display text-xl font-bold text-brand-navy">
+              Odyssey
+            </span>
           </Link>
 
           <div className="hidden md:flex items-center gap-8">
             <Link
               href="/"
               className={cn(
-                'text-sm font-medium transition-colors',
-                pathname === '/' ? 'text-brand-amber' : 'text-brand-slate hover:text-brand-navy'
+                "text-sm font-medium transition-colors",
+                pathname === "/"
+                  ? "text-brand-amber"
+                  : "text-brand-slate hover:text-brand-navy",
               )}
             >
               Home
@@ -84,8 +94,10 @@ export function Navbar() {
             <Link
               href="/items"
               className={cn(
-                'text-sm font-medium transition-colors',
-                pathname === '/items' ? 'text-brand-amber' : 'text-brand-slate hover:text-brand-navy'
+                "text-sm font-medium transition-colors",
+                pathname === "/items"
+                  ? "text-brand-amber"
+                  : "text-brand-slate hover:text-brand-navy",
               )}
             >
               Products
@@ -93,8 +105,10 @@ export function Navbar() {
             <Link
               href="/about"
               className={cn(
-                'text-sm font-medium transition-colors',
-                pathname === '/about' ? 'text-brand-amber' : 'text-brand-slate hover:text-brand-navy'
+                "text-sm font-medium transition-colors",
+                pathname === "/about"
+                  ? "text-brand-amber"
+                  : "text-brand-slate hover:text-brand-navy",
               )}
             >
               About
@@ -122,8 +136,20 @@ export function Navbar() {
                   onClick={() => setDropdownOpen(!dropdownOpen)}
                   className="flex items-center gap-2 p-1.5 rounded-full hover:bg-gray-100 transition-colors"
                 >
-                  <div className="w-8 h-8 rounded-full bg-brand-amber flex items-center justify-center text-brand-navy font-medium text-sm">
-                    {getInitials(user.displayName)}
+                  <div className="w-9 h-9 rounded-full bg-brand-amber flex items-center justify-center text-brand-navy font-medium text-sm">
+                    {user?.photoURL ? (
+                      <Image
+                        src={user.photoURL}
+                        alt={user.displayName || "User"}
+                        width={36}
+                        height={36}
+                        className="rounded-full object-cover border"
+                      />
+                    ) : (
+                      <div className="w-8 h-8 rounded-full bg-brand-amber flex items-center justify-center text-brand-navy font-medium text-sm">
+                        {getInitials(user.displayName)}
+                      </div>
+                    )}
                   </div>
                 </button>
                 <AnimatePresence>
@@ -137,9 +163,11 @@ export function Navbar() {
                     >
                       <div className="px-4 py-2 border-b border-gray-100">
                         <p className="text-sm font-medium text-brand-navy truncate">
-                          {user.displayName || 'User'}
+                          {user.displayName || "User"}
                         </p>
-                        <p className="text-xs text-brand-slate truncate">{user.email}</p>
+                        <p className="text-xs text-brand-slate truncate">
+                          {user.email}
+                        </p>
                       </div>
                       <Link
                         href="/items/add"
@@ -188,7 +216,7 @@ export function Navbar() {
         {mobileMenuOpen && (
           <motion.div
             initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
+            animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
             className="md:hidden bg-white border-t"
           >
@@ -222,7 +250,10 @@ export function Navbar() {
                       Login
                     </Button>
                   </Link>
-                  <Link href="/register" onClick={() => setMobileMenuOpen(false)}>
+                  <Link
+                    href="/register"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
                     <Button variant="primary" className="w-full justify-start">
                       Register
                     </Button>
@@ -232,22 +263,34 @@ export function Navbar() {
               {mounted && !authLoading && user && (
                 <div className="space-y-2 pt-2">
                   <div className="px-3 py-2">
-                    <p className="text-sm font-medium text-brand-navy">{user.displayName || 'User'}</p>
+                    <p className="text-sm font-medium text-brand-navy">
+                      {user.displayName || "User"}
+                    </p>
                     <p className="text-xs text-brand-slate">{user.email}</p>
                   </div>
-                  <Link href="/items/add" onClick={() => setMobileMenuOpen(false)}>
+                  <Link
+                    href="/items/add"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
                     <Button variant="ghost" className="w-full justify-start">
                       <Plus className="w-4 h-4 mr-2" />
                       Add Product
                     </Button>
                   </Link>
-                  <Link href="/items/manage" onClick={() => setMobileMenuOpen(false)}>
+                  <Link
+                    href="/items/manage"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
                     <Button variant="ghost" className="w-full justify-start">
                       <LayoutGrid className="w-4 h-4 mr-2" />
                       Manage Products
                     </Button>
                   </Link>
-                  <Button variant="ghost" className="w-full justify-start" onClick={handleLogout}>
+                  <Button
+                    variant="ghost"
+                    className="w-full justify-start"
+                    onClick={handleLogout}
+                  >
                     <LogOut className="w-4 h-4 mr-2" />
                     Logout
                   </Button>
