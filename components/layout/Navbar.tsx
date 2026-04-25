@@ -1,11 +1,13 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, Plus, LayoutGrid, LogOut } from "lucide-react";
 import { useAuthStore } from "@/stores/authStore";
+import { signOut } from "firebase/auth";
+import { auth } from "@/lib/firebase";
 import { Button } from "@/components/ui/Button";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
@@ -18,31 +20,35 @@ const dropdownVariants = {
 
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
-  const [mounted, setMounted] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
-  const { user, loading: authLoading } = useAuthStore();
+  
+const user = useAuthStore((state) => state.user);
+  const setUser = useAuthStore((state) => state.setUser);
+  const [renderKey, setRenderKey] = useState(0);
 
   useEffect(() => {
-    setMounted(true);
-    const timer = setTimeout(() => setMounted(true), 100);
-    return () => clearTimeout(timer);
-  }, []);
+    setRenderKey(k => k + 1);
+  }, [user]);
+
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+    } catch (error) {
+      console.error('Firebase signOut error:', error);
+    }
+    setUser(null);
+    setDropdownOpen(false);
+    router.push("/");
+  };
 
   useEffect(() => {
     const handler = () => setScrolled(window.scrollY > 20);
     window.addEventListener("scroll", handler);
     return () => window.removeEventListener("scroll", handler);
   }, []);
-
-  const handleLogout = async () => {
-    const { setUser } = useAuthStore.getState();
-    setUser(null);
-    setDropdownOpen(false);
-    router.push("/");
-  };
 
   const getInitials = (name: string | null) => {
     if (!name) return "U";
@@ -115,8 +121,8 @@ export function Navbar() {
             </Link>
           </div>
 
-          <div className="hidden md:flex items-center gap-4">
-            {mounted && !authLoading && !user && (
+          <div className="hidden md:flex items-center gap-4" key={`auth-${renderKey}`}>
+            {!user ? (
               <>
                 <Link href="/login">
                   <Button variant="ghost" size="sm">
@@ -129,8 +135,7 @@ export function Navbar() {
                   </Button>
                 </Link>
               </>
-            )}
-            {mounted && !authLoading && user && (
+            ) : (
               <div className="relative">
                 <button
                   onClick={() => setDropdownOpen(!dropdownOpen)}
@@ -146,9 +151,9 @@ export function Navbar() {
                         className="rounded-full object-cover border"
                       />
                     ) : (
-                      <div className="w-8 h-8 rounded-full bg-brand-amber flex items-center justify-center text-brand-navy font-medium text-sm">
+                      <span className="text-sm font-medium">
                         {getInitials(user.displayName)}
-                      </div>
+                      </span>
                     )}
                   </div>
                 </button>
@@ -243,7 +248,7 @@ export function Navbar() {
                 About
               </Link>
               <hr className="border-gray-100" />
-              {mounted && !authLoading && !user && (
+              {!user ? (
                 <div className="space-y-2 pt-2">
                   <Link href="/login" onClick={() => setMobileMenuOpen(false)}>
                     <Button variant="ghost" className="w-full justify-start">
@@ -259,14 +264,30 @@ export function Navbar() {
                     </Button>
                   </Link>
                 </div>
-              )}
-              {mounted && !authLoading && user && (
+              ) : (
                 <div className="space-y-2 pt-2">
-                  <div className="px-3 py-2">
-                    <p className="text-sm font-medium text-brand-navy">
-                      {user.displayName || "User"}
-                    </p>
-                    <p className="text-xs text-brand-slate">{user.email}</p>
+                  <div className="flex items-center gap-3 px-3 py-2">
+                    <div className="w-10 h-10 rounded-full bg-brand-amber flex items-center justify-center">
+                      {user?.photoURL ? (
+                        <Image
+                          src={user.photoURL}
+                          alt={user.displayName || "User"}
+                          width={40}
+                          height={40}
+                          className="rounded-full object-cover"
+                        />
+                      ) : (
+                        <span className="text-sm font-medium text-brand-navy">
+                          {getInitials(user.displayName)}
+                        </span>
+                      )}
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium text-brand-navy">
+                        {user.displayName || "User"}
+                      </p>
+                      <p className="text-xs text-brand-slate">{user.email}</p>
+                    </div>
                   </div>
                   <Link
                     href="/items/add"
