@@ -1,166 +1,218 @@
 # 🛍️ Odyssey — Premium E-Commerce Platform
 
-> Watch the full walkthrough of Odyssey — architecture, UI, and features.
-
-[![Watch on YouTube](https://i.ibb.co.com/ks46XNWG/odyssey-premium-e-commerce-platform-vercel-app-2026-04-25-13-12-59.png)](https://www.youtube.com/watch?v=Ka0TNr2RRYA)
-
-> **Discover. Desire. Own.**
+> **Discover. Desire. Own.**  
 > A modern, curated lifestyle e-commerce experience built with performance, clean UI, and scalable architecture in mind.
+
+# 🎥 Project Walkthrough
+
+Watch the complete walkthrough covering architecture, UI, responsiveness, features, and development flow.
+
+<p align="center">
+  <a href="https://www.youtube.com/watch?v=Ka0TNr2RRYA">
+    <img 
+      src="https://i.ibb.co.com/RT3wLrXr/odyseey-pre-tempalte.pngg" 
+      alt="Odyssey Project Walkthrough"
+      width="100%"
+    />
+  </a>
+</p>
+
+<p align="center">
+  <a href="https://www.youtube.com/watch?v=Ka0TNr2RRYA">
+    ▶️ Watch Full Video on YouTube
+  </a>
+</p>
 
 ---
 
+
 ## ✨ Key Features
 
-* 🔐 **Firebase Authentication**
+### 🔐 Firebase Authentication
 
-  * Email & Password login/register
-  * Google OAuth integration
+- Email & Password Authentication
+- Google OAuth Integration
+- Persistent Login Sessions
 
-* 🛍️ **Dynamic Product Catalog**
+### 🛍️ Dynamic Product Catalog
 
-  * Search functionality
-  * Multi-filtering (category, price, rating)
-  * Responsive grid layout
+- Product Search Functionality
+- Multi-filtering System
+  - Category
+  - Price
+  - Rating
+- Responsive Product Grid
 
-* ➕ **Product Management (Protected)**
+### ➕ Product Management (Protected)
 
-  * Add new products
-  * Manage & delete products
-  * Real-time updates via Firebase
+- Add New Products
+- Manage Existing Products
+- Delete Products
+- Real-time Firebase Updates
 
-* 🔒 **Protected Routes**
+### 🔒 Protected Routes
 
-  * Auth-based access control
-  * Middleware + client-side guard
+- Authentication-based Access Control
+- Middleware + Client-side Route Protection
 
-* 💾 **State Management**
+### 💾 State Management
 
-  * Zustand for global state
-  * Persistent storage support
+- Zustand Global Store
+- Persistent Storage Support
 
-* 🎬 **Smooth UI & Animations**
+### 🎬 Smooth UI & Interactions
 
-  * Framer Motion interactions
-  * Micro-animations for better UX
+- Framer Motion Animations
+- Micro-interactions for Enhanced UX
+- Smooth Hover & Transition Effects
 
-* 📱 **Fully Responsive Design**
+### 📱 Fully Responsive Design
 
-  * Mobile-first approach
-  * Optimized for all screen sizes
+- Mobile-first Architecture
+- Optimized for:
+  - Mobile
+  - Tablet
+  - Laptop
+  - Desktop
 
 ---
 
 ## 🛣️ Route Summary
 
-| Route           | Access  | Description                  |
-| --------------- | ------- | ---------------------------- |
-| `/`             | Public  | Landing page with 7 sections |
-| `/items`        | Public  | Product listing with filters |
-| `/items/[id]`   | Public  | Product details page         |
-| `/items/add`    | 🔒 Auth | Add new product              |
-| `/items/manage` | 🔒 Auth | Manage all products          |
-| `/about`        | Public  | About the platform           |
-| `/login`        | Public  | User login                   |
-| `/register`     | Public  | User registration            |
+| Route | Access | Description |
+|-------|--------|-------------|
+| `/` | Public | Landing page with multiple sections |
+| `/items` | Public | Product listing with filtering |
+| `/items/[id]` | Public | Product details page |
+| `/items/add` | 🔒 Auth | Add new product |
+| `/items/manage` | 🔒 Auth | Manage all products |
+| `/about` | Public | About page |
+| `/login` | Public | User login |
+| `/register` | Public | User registration |
 
 ---
 
 ## 🚀 Getting Started
 
-### 1. Clone Repository
+### 1️⃣ Clone Repository
 
 ```bash
-git clone <https://github.com/engsiam/Odyssey-Premium-E-Commerce-Platform.git>
-cd odyssey
+git clone https://github.com/engsiam/Odyssey-Premium-E-Commerce-Platform.git
+
+cd Odyssey-Premium-E-Commerce-Platform
 ```
 
-### 2. Install Dependencies
+---
+
+### 2️⃣ Install Dependencies
 
 ```bash
 npm install
 ```
 
-### 3. Environment Setup
+---
 
-Create a `.env.local` file and add:
+### 3️⃣ Environment Variables
+
+Create a `.env.local` file in the root directory and add:
 
 ```env
 NEXT_PUBLIC_FIREBASE_API_KEY=
+
 NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=
+
 NEXT_PUBLIC_FIREBASE_PROJECT_ID=
+
 NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=
+
 NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=
+
 NEXT_PUBLIC_FIREBASE_APP_ID=
 ```
 
-### 4. Run Development Server
+---
+
+### 4️⃣ Run Development Server
 
 ```bash
 npm run dev
 ```
 
-### 5. Open in Browser
+---
 
-```
+### 5️⃣ Open in Browser
+
+```bash
 http://localhost:3000
 ```
 
 ---
 
-## 🔧 Firebase Setup
+## 🔥 Firebase Setup
 
-1. Go to **Firebase Console**
-2. Create a new project
-3. Enable **Authentication**
-
-   * Email/Password
-   * Google Sign-In
-4. Add your app config to `.env.local`
-5. Add authorized domains:
-
-   * `localhost`
-   * your production URL
+1. Open Firebase Console
+2. Create a New Firebase Project
+3. Enable Authentication
+   - Email/Password
+   - Google Sign-In
+4. Copy Firebase Config
+5. Paste Credentials into `.env.local`
+6. Add Authorized Domains:
+   - `localhost`
+   - Production URL
 
 ---
 
 ## 🏗️ Tech Stack
 
-* **Frontend:** Next.js (App Router)
-* **Language:** TypeScript
-* **Styling:** Tailwind CSS v4
-* **Animation:** Framer Motion
-* **Authentication:** Firebase Auth
-* **State Management:** Zustand
+| Category | Technology |
+|----------|-------------|
+| Framework | Next.js App Router |
+| Language | TypeScript |
+| Styling | Tailwind CSS v4 |
+| Animation | Framer Motion |
+| Authentication | Firebase Auth |
+| State Management | Zustand |
 
 ---
 
 ## 📦 Project Highlights
 
-* Clean and scalable folder structure
-* Reusable UI components
-* Consistent design system
-* Optimized performance and UX
-* Production-ready architecture
+- Scalable Folder Architecture
+- Reusable UI Components
+- Clean Design System
+- Responsive Layout System
+- Optimized User Experience
+- Production-ready Structure
+- Modern Frontend Best Practices
 
 ---
 
 ## 🌐 Live Demo
 
-👉 [*Live Link*](https://odyssey-premium-e-commerce-platform.vercel.app/)
+👉 **Live Website**  
+https://odyssey-premium-e-commerce-platform.vercel.app/
 
 ---
 
-
 ## 🧠 Developer Notes
 
-This project goes beyond the minimum requirements by:
+This project extends beyond basic requirements by implementing:
 
-* Implementing a real-world product management flow
-* Using modern state management (Zustand)
-* Enhancing UI with animations and responsive design
+- Real-world product management workflow
+- Modern global state management using Zustand
+- Responsive-first UI architecture
+- Smooth motion and interaction system
+- Clean component-driven development structure
 
 ---
 
 ## 📄 License
 
-This project is built for assessment and learning purposes.
+This project is built for educational, assessment, and portfolio purposes.
+
+---
+
+## ⭐ Support
+
+If you like this project, consider giving it a star on GitHub.
